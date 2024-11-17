@@ -1,12 +1,10 @@
+#Importando os dados de outro arquivo tarefas
+from Tarefas import Tarefa
+
 #defindo a classe lista de taferas 
 class Lista_Tarefas:
-    def __init__(self, Nome, Data, Prioridade):
-        self.nome = Nome
-        self.data = Data
-        self.prioridade = Prioridade
+    def __init__(self):
         self.tarefas = []
-
-#/////////////////////////Métodos\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 #Menu da Lista de Tarefas
     def menu(self):
@@ -16,74 +14,108 @@ class Lista_Tarefas:
         print("║ 2. Concluir Tarefa           ║")
         print("║ 3. Editar Tarefa             ║")
         print("║ 4. Excluir Tarefa            ║")
-        print("║ 5. Data de entrega           ║")
-        print("║ 6. Sair                      ║")
+        print("║ 5. Sair                      ║")
         print("────────────────────────────────")
+
+#/////////////////////////Métodos\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 #Definindo para escolher as opções
     def exibir_opcoes(self):
         while True:
             try:
-                escolha = (int(input("Qual opção você quer mexer: ")))
+                self.menu()
+                escolha = (int(input("Qual opção você quer: ")))
                 
                 if escolha == 1:
                     nome_tarefa = input("Digite o nome da tarefa que procura: ")
                     print(self.procurar_tarefas(nome_tarefa))
+
                 elif escolha == 2:
-                    concluir_tarefas()
+                    self.concluir_tarefa()
+
                 elif escolha == 3:
                     print("Editar Tarefa")
-                    editar_tarefas()
+                    self.editar_tarefas()
+
                 elif escolha == 4:
-                    excluir_tarefa()
-                    print("Saindo do programa")
+                    self.excluir_tarefa()
+                    
                 elif escolha == 5:
-                    data_de_entrega()
-                elif escolha == 6:
+                    print("Saindo do programa...")
                     exit()
-                    print("Saindo do programa")
+                    break
                 else:
                     print("Opção invalida!")
             except ValueError:
                 print(" Digite novamente!")
 
-#Procurando tarefas adiciona na lista.
-    def adicionar_tarefa(self, tarefa):
-       self.tarefas.append(tarefa)
-       print(f"Tarefa '{tarefa}' adicionada com sucesso!")
-
-#Procurar as taferas se está adcionada na lista ou não
+    #Procurar as taferas se está adcionada na lista ou não
     def procurar_tarefas (self, nome_tarefa):
         for tarefa in self.tarefas:
-            if tarefa.nome.lower() == nome_tarefa.lower():
+            if tarefa.titulo.lower() == nome_tarefa.lower():
                 return f" A tarefa '{nome_tarefa}' foi encontrada." #True
             else:
                 return f"A tarefa'{nome_tarefa}' não existe na lista." #False
 
-#Criando uma instância da classe
-#minha_lista = Lista_Tarefas("Trabalho", "2024-11-20", "Alta")
-
-#resultado = minha_lista.procurar_tarefas(nome_da_tarefa)
-#print(resultado)
-
 #Concluindo tarefas
-    def concluir_taferas(self, Tarefa):
-        self.tarefas.remove(Tarefa)
-        print("tarefa entregue")
+#nesta função será para concluir a tarefa que voce deseja
+    def concluir_tarefa(self):
+        print("======== Concluir Tarefas ========")
+        print("──────────────────────────────────")
+        nome_tarefa = input("Digite o nome da tarefa que deseja ser concluida: ")
+        for tarefa in self.tarefas:
+            if tarefa.titulo.lower() == nome_tarefa.lower(): #vai procurar pelo titulo da tarefa
+                self.tarefas.remove(tarefa)
+                print(f"Tarefa '{nome_tarefa}' removida da lista.")
+                return
+        print(f"Tarefa '{nome_tarefa}' não foi encontrada.")
 
 #Editando as tarefas
     def editar_tarefas(self, Tarefas):
-        print("")
-        self.editar_tarefas = Tarefas
+        print("======= Editar Tarefas =======")
+        print("──────────────────────────────")
+        nome_tarefa = input("Digite o nome da tarefa que deseja ser alterada:")
+        for tarefa in self.tarefas:
+            if tarefa.título.lower() == nome_tarefa.lower():
+                novo_titulo = input (f"Novo título (anterior: {tarefa.titulo}): ") or tarefa.titulo
+                nova_data = input(f"Nova data (anterior: {tarefa.data}): ") or tarefa.data
+                nova_descricao = input(f"Nova descrição (anterior: {tarefa.descricao}): ") or tarefa.descricao
+                nova_prioridade =  input(f"Nova prioridade (anterior: {tarefa.prioridade}): ") or tarefa.prioridade
 
+                #Atualizando os atributos
+                tarefa.titulo = novo_titulo
+                tarefa.data = nova_data
+                tarefa.descricao = nova_descricao
+                tarefa.prioridade = nova_prioridade
+                print(f"Tarefa '{nome_tarefa}' atualizada com sucesso!")
+                return
+        print(f"A tarefa '{nome_tarefa}' não foi encontrada.")
+
+                
 #Excluindo Tarefas
-    #def excluindo_tarefas(self, Tarefa):
-        #self.excluindo_tarefas = self.tarefas.remove(Tarefa)
-#Data de entrega
-# O usúario conseguira vê as datas de entregas das atividades
-    #def data_de_entrega(self, Tarefa, Data):
-        #self.data_de_entrega = Data
-        
-#atividade1 = Lista_Tarefas('ativade de POO','13/11/2024', 'Alta') print( atividade1.nome, atividade1.data, atividade1.prioridade)
+    def excluindo_tarefas(self, Tarefa):
+        nome_tarefa = input("Digite o nome da terefa que deseja excluir: ")
+        for tarefa in self.tarefas:
+            if tarefa.titulo.lower() == nome_tarefa.lower():
+                self.tarefas.remove(Tarefa)
+                print(f"Tarefa {nome_tarefa}' excluida com sucesso!")
+                return
+            print(f"A tarefa '{nome_tarefa}' não foi encontrada.")
 
+#Exibir todas as tarefas
+    def exibir_tarefas(self):
+        if not self.tarefas:
+            print("nenhuma tarefas cadastrada.")
+        else:
+            print("======== Lista de Tarefas ========")
+            print("──────────────────────────────────")
 
+            for i, tarefa in enumerate(self.tarefas, start=1):
+                print(f"{i}.\n{tarefa.info()}")
+
+#Rodando o programa
+if __name__ == "__main__":
+    lista = Lista_Tarefas()
+    lista.exibir_opcoes()
+
+#FIM
